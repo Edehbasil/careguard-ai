@@ -3,8 +3,12 @@ from sqlalchemy.orm import Session
 from app.db.session import SessionLocal
 from app.schemas.checkin import HealthCheckCreate
 from app.models.checkin import CheckIn
+from app.routers import checkin
 
 app = FastAPI()
+
+app.include_router(checkin.router)
+
 
 def get_db():
     db = SessionLocal()
