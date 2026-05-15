@@ -9,7 +9,9 @@
     ##model_config = {
      ##   "from_attributes": True
     ##}
+from pydantic import BaseModel, Field
 from pydantic import BaseModel
+from datetime import datetime
 from typing import Optional
 from fastapi import APIRouter
 
@@ -26,15 +28,24 @@ class HealthCheckCreate(BaseModel):
 
 class CheckInCreate(BaseModel):
     employee_name: str
-    temperature: str
+    temperature: float = Field(..., ge=34.0, le=42.0)
     symptoms: Optional[str] = None
 
 class CheckInResponse(BaseModel):
     id: int
     employee_name: str
-    temperature: str
+    temperature: float
     symptoms: Optional[str]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+class CheckInResponse(BaseModel):
+    id: int
+    user_name: str
+    time: datetime
+    notes: str | None
+
+    class Config:
+        from_attributes = True
 
