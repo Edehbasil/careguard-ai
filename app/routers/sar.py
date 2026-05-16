@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List
 
 from app.db.dependencies import get_db
@@ -95,7 +95,7 @@ def update_sar_status(
     sar.status = status_update.status
 
     if status_update.status in (SARStatus.completed, SARStatus.closed):
-        sar.resolved_at = datetime.utcnow()
+        sar.resolved_at = datetime.now(timezone.utc).replace(tzinfo=None)
 
     db.commit()
     db.refresh(sar)
@@ -115,6 +115,7 @@ def update_sar_status(
 def _add_days_remaining(sar: SubjectAccessRequest) -> SARResponse:
     data = SARResponse.model_validate(sar)
     if sar.deadline and sar.status not in (SARStatus.completed, SARStatus.closed):
-        delta = sar.deadline - datetime.utcnow()
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
+        delta = sar.deadline - now
         data.days_remaining = max(delta.days, 0)
     return data

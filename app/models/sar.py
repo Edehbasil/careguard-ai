@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum
 from sqlalchemy.orm import relationship
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import enum
 
 from app.db.base import Base
@@ -21,8 +21,8 @@ class SubjectAccessRequest(Base):
     requester_email = Column(String, nullable=False)
     description = Column(String, nullable=False)
     status = Column(String, default=SARStatus.pending)
-    submitted_at = Column(DateTime, default=datetime.utcnow)
-    deadline = Column(DateTime, default=lambda: datetime.utcnow() + timedelta(days=30))
+    submitted_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    deadline = Column(DateTime, default=lambda: datetime.now(timezone.utc) + timedelta(days=30))
     resolved_at = Column(DateTime, nullable=True)
     submitted_by_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
 

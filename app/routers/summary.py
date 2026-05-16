@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from datetime import datetime
-from typing import List
+from datetime import datetime, timezone
 
 from app.db.dependencies import get_db
 from app.db.models.user import User
@@ -21,9 +20,8 @@ def get_summary(
     if not current_user.is_admin:
         raise HTTPException(status_code=403, detail="Admin access required")
 
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
 
-    # SAR stats
     total_sars = db.query(SubjectAccessRequest).count()
     open_sars = db.query(SubjectAccessRequest).filter(
         SubjectAccessRequest.status.in_([SARStatus.pending, SARStatus.in_progress])
@@ -33,7 +31,6 @@ def get_summary(
         SubjectAccessRequest.status.in_([SARStatus.pending, SARStatus.in_progress])
     ).count()
 
-    # Breach stats
     total_breaches = db.query(DataBreach).count()
     unnotified_breaches = db.query(DataBreach).filter(
         DataBreach.ico_notified == False,
@@ -44,12 +41,10 @@ def get_summary(
         DataBreach.ico_notified == False
     ).count()
 
-    # Recent audit entries
     recent_audit = db.query(AuditLog).order_by(
         AuditLog.timestamp.desc()
     ).limit(5).all()
 
-    # User stats
     total_users = db.query(User).count()
 
     return {

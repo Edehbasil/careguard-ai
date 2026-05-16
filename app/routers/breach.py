@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List
 
 from app.db.dependencies import get_db
@@ -84,7 +84,7 @@ def update_ico_status(
 
     breach.ico_notified = update.ico_notified
     if update.ico_notified:
-        breach.ico_notified_at = datetime.utcnow()
+        breach.ico_notified_at = datetime.now(timezone.utc).replace(tzinfo=None)
 
     db.commit()
     db.refresh(breach)
@@ -117,7 +117,7 @@ def resolve_breach(
 
     breach.resolved = update.resolved
     if update.resolved:
-        breach.resolved_at = datetime.utcnow()
+        breach.resolved_at = datetime.now(timezone.utc).replace(tzinfo=None)
 
     db.commit()
     db.refresh(breach)
@@ -137,7 +137,8 @@ def resolve_breach(
 def _add_hours_remaining(breach: DataBreach) -> BreachResponse:
     data = BreachResponse.model_validate(breach)
     if breach.ico_deadline and not breach.ico_notified:
-        delta = breach.ico_deadline - datetime.utcnow()
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
+        delta = breach.ico_deadline - now
         total_seconds = delta.total_seconds()
         data.hours_remaining = max(int(total_seconds // 3600), 0)
     return data
