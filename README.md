@@ -30,6 +30,13 @@ CareGuard is built around those obligations. It is not a generic CRUD applicatio
 - Automatic resolution timestamp on completion
 - Admin-only status updates; users can only view their own SARs
 
+### Audit Log
+- Automatic logging of all significant actions (SAR submissions, status updates)
+- Records user, action type, affected resource, and timestamp
+- Admin endpoint to view full system audit trail
+- User endpoint to view personal activity log
+- Supports accountability principle under UK GDPR Article 5(2)
+
 ### Health Check-Ins
 - Employee health check submission with temperature validation
 - Retrieval of individual and all check-in records
