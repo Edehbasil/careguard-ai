@@ -37,6 +37,14 @@ CareGuard is built around those obligations. It is not a generic CRUD applicatio
 - User endpoint to view personal activity log
 - Supports accountability principle under UK GDPR Article 5(2)
 
+### Data Breach Notification Tracker
+- Report data breaches with severity classification
+- Automatic 72-hour ICO notification deadline (UK GDPR Article 33)
+- Real-time hours remaining countdown
+- ICO notification and resolution status tracking
+- Admin-only breach listing; reporters can view their own breaches
+- All actions automatically logged to audit trail
+
 ### Health Check-Ins
 - Employee health check submission with temperature validation
 - Retrieval of individual and all check-in records
