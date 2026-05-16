@@ -9,6 +9,7 @@ from app.routers.checkin import router as checkin_router
 from app.routers.sar import router as sar_router
 from app.routers.audit import router as audit_router
 from app.routers.breach import router as breach_router
+from app.routers.summary import router as summary_router
 
 import app.models  # noqa
 
@@ -21,3 +22,4 @@ app.include_router(checkin_router)
 app.include_router(sar_router)
 app.include_router(audit_router)
 app.include_router(breach_router)
+app.include_router(summary_router)
