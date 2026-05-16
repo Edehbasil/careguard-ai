@@ -1,13 +1,9 @@
-# app/db/dependencies.py
-from app.db.database import SessionLocal
-from contextlib import asynccontextmanager
+from sqlalchemy.orm import Session
+from app.db.session import SessionLocal
 
-@asynccontextmanager
-async def get_db():
-    """
-    Async-compatible DB session dependency for FastAPI.
-    """
-    db = SessionLocal()
+
+def get_db():
+    db: Session = SessionLocal()
     try:
         yield db
     finally:

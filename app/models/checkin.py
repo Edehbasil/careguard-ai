@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float
-from app.db.session import Base
+from app.db.base import Base
+
 
 class CheckIn(Base):
     __tablename__ = "checkins"
