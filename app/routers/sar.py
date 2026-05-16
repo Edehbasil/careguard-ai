@@ -8,6 +8,7 @@ from app.models.sar import SubjectAccessRequest, SARStatus
 from app.schemas.sar import SARCreate, SARResponse, SARStatusUpdate
 from app.db.models.user import User
 from app.routers.auth import get_current_user
+from app.utils.audit import log_action
 
 router = APIRouter(prefix="/sar", tags=["Subject Access Requests"])
 
@@ -27,6 +28,16 @@ def submit_sar(
     db.add(new_sar)
     db.commit()
     db.refresh(new_sar)
+
+    log_action(
+        db=db,
+        action="CREATE",
+        resource="SAR",
+        user_id=current_user.id,
+        resource_id=new_sar.id,
+        detail=f"SAR submitted by {current_user.email}"
+    )
+
     return _add_days_remaining(new_sar)
 
 
@@ -80,6 +91,7 @@ def update_sar_status(
     if not sar:
         raise HTTPException(status_code=404, detail="SAR not found")
 
+    old_status = sar.status
     sar.status = status_update.status
 
     if status_update.status in (SARStatus.completed, SARStatus.closed):
@@ -87,6 +99,16 @@ def update_sar_status(
 
     db.commit()
     db.refresh(sar)
+
+    log_action(
+        db=db,
+        action="STATUS_UPDATE",
+        resource="SAR",
+        user_id=current_user.id,
+        resource_id=sar.id,
+        detail=f"Status changed from {old_status} to {status_update.status} by {current_user.email}"
+    )
+
     return _add_days_remaining(sar)
 
 

@@ -9,6 +9,8 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from app.db.base import Base
 from app.db.models.user import User
 from app.models.checkin import CheckIn
+from app.models.sar import SubjectAccessRequest
+from app.models.audit import AuditLog
 
 config = context.config
 fileConfig(config.config_file_name)
