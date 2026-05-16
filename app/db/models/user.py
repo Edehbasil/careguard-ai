@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy.orm import relationship
 from app.db.base import Base
+
 
 class User(Base):
     __tablename__ = "users"
@@ -10,3 +12,5 @@ class User(Base):
     full_name = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
+
+    sar_requests = relationship("SubjectAccessRequest", back_populates="submitted_by")
