@@ -45,6 +45,13 @@ CareGuard is built around those obligations. It is not a generic CRUD applicatio
 - Admin-only breach listing; reporters can view their own breaches
 - All actions automatically logged to audit trail
 
+### Admin Summary Dashboard
+- Single endpoint returning system-wide compliance status
+- Open and overdue SAR counts
+- Unnotified and overdue data breach counts
+- Recent audit activity feed
+- Admin-only access
+
 ### Health Check-Ins
 - Employee health check submission with temperature validation
 - Retrieval of individual and all check-in records
